@@ -28,7 +28,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     entities = []
     for sensor_type in SENSOR_TYPES:
         _LOGGER.debug(f"Creating sensor for {sensor_type}")
-        entities.append(AirkeySensor(sensor_type, api_key, scan_interval))
+        
+        # Gebruik hier een combinatie van api_key en sensor_type voor een uniek ID
+        unique_id = f"{api_key}_{sensor_type}"
+        
+        entities.append(AirkeySensor(sensor_type, api_key, scan_interval, unique_id))
 
     _LOGGER.debug(f"Adding {len(entities)} sensors.")
     async_add_entities(entities, True)
@@ -36,7 +40,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class AirkeySensor(SensorEntity):
     """Representation of an Evva Airkey sensor."""
 
-    def __init__(self, sensor_type, api_key, scan_interval):
+    def __init__(self, sensor_type, api_key, scan_interval, unique_id):
         """Initialize the sensor."""
         self._type = sensor_type
         self._name = SENSOR_TYPES[sensor_type]
@@ -44,6 +48,7 @@ class AirkeySensor(SensorEntity):
         self._api_key = api_key
         self._scan_interval = scan_interval
         self._attributes = {}
+        self._unique_id = unique_id
 
     @property
     def name(self):
@@ -59,6 +64,22 @@ class AirkeySensor(SensorEntity):
     def extra_state_attributes(self):
         """Return the state attributes."""
         return self._attributes
+    
+    @property
+    def unique_id(self):
+        """Return a unique ID for this sensor."""
+        return self._unique_id
+
+    @property
+    def device_info(self):
+        """Return device information for this sensor."""
+        return {
+            "identifiers": {(DOMAIN, self._unique_id)},
+            "name": "Evva Airkey",
+            "manufacturer": "Evva",
+            "model": "Airkey Sensor",
+            "via_device": (DOMAIN, "airkey_controller"),  # Gebruik hier je specifieke controller-ID indien nodig
+        }
 
     async def async_update(self):
         """Fetch new state data for the sensor."""
@@ -66,7 +87,7 @@ class AirkeySensor(SensorEntity):
 
         data, attributes = await self.fetch_data()
 
-        # Plaats een korte waarde in de state, zoals de lengte van de data of een simpele status
+        # Plaats een eenvoudige waarde in de state, zoals de lengte van de data of een simpele status
         if data:
             self._state = len(data) if isinstance(data, list) else "OK"
             self._attributes = attributes
