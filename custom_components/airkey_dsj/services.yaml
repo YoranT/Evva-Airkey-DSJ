@@ -1,0 +1,3 @@
+refresh:
+  description: "Manually refresh all Airkey sensors"
+  fields: {}
