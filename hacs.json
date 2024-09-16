@@ -1,5 +1,5 @@
 {
-  "name": "Evva Airkey (custom)",
+  "name": "Evva Airkey DSJ",
   "content_in_root": false,
   "domains": ["airkey"],
   "homeassistant": "2023.7.0",
