@@ -115,7 +115,7 @@ class AirkeySensor(SensorEntity):
 
     def _get_api_url(self):
         """Construct the correct API URL based on the sensor type."""
-        base_url = "https://api.airkey.evva.com:443/cloud/"
+        base_url = "https://api.airkey.evva.com:443/cloud/v1/"
         endpoints = {
             "events": f"{base_url}events?createdAfter=2024-08-01T09:15:10.295Z&limit=1000",
             "credits": f"{base_url}credits",
