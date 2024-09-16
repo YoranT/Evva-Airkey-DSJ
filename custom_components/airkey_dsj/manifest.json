@@ -2,10 +2,10 @@
     "domain": "airkey",
     "name": "Evva Airkey (custom)",
     "version": "1.0.0",
-    "documentation": "https://github.com/reiniertc/airkey",
+    "documentation": "https://github.com/YoranT",
     "requirements": [],
     "dependencies": [],
-    "codeowners": ["@reiniertc"],
+    "codeowners": ["@YoranT"],
     "config_flow": true,
     "iot_class": "cloud_polling"
   }
